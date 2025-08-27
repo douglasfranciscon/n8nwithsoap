@@ -1,12 +1,13 @@
+# Usa a imagem oficial como base
 FROM n8nio/n8n:latest
 
-WORKDIR /data
+# Instala o node comunitário globalmente
+USER root
+RUN npm install -g n8n-nodes-soaprequest
 
-# Instala o node comunitário desejado
-RUN npm install n8n-nodes-soaprequest
+# Volta para o usuário padrão da imagem
+USER node
 
-# Usa o entrypoint original da imagem
+# Mantém o entrypoint original
 ENTRYPOINT ["/docker-entrypoint.sh"]
-
-# Comando padrão para iniciar n8n
 CMD ["n8n"]
