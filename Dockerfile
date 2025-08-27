@@ -1,22 +1,17 @@
-# Usa a imagem oficial do n8n como base
-FROM n8nio/n8n:latest
+# Base enxuta do Node (Alpine)
+FROM node:20-alpine
 
-# Troca para root temporariamente para instalar pacotes
-USER root
-
-# Instala bash e utilitários básicos (para inspeção e debugging)
+# Instala utilitários mínimos para inspeção
 RUN apk add --no-cache bash coreutils
 
-# Instala o node comunitário globalmente
-RUN npm install -g n8n-nodes-soaprequest
+# Instala n8n globalmente + pacote SOAPRequest
+RUN npm install -g n8n n8n-nodes-soaprequest
 
-# Volta para o usuário padrão do n8n
+# Troca para usuário não-root
 USER node
 
-# Mantém o entrypoint original da imagem
-ENTRYPOINT ["/docker-entrypoint.sh"]
+# Mantém o container rodando para inspeção
+CMD ["bash"]
+# Alternativa: ["sleep","infinity"] se preferir
 
-# Comando padrão para iniciar o n8n
-# Durante inspeção, pode mudar temporariamente para: ["bash"] ou ["sleep","infinity"]
-#CMD ["/usr/local/bin/n8n"]
-CMD ["sleep", "infinity"]
+
